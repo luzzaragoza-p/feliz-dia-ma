@@ -106,7 +106,7 @@ h2 .sub { display: block; color: var(--muted); font-size: clamp(18px, 3vh, 24px)
 }
 .board-col { grid-area: board; align-self: end; min-width: 0; display: flex; flex-direction: column; gap: 12px; }
 .board { position: relative; width: 100%; aspect-ratio: 4 / 3; background: #20172B; border: 1px solid var(--line); border-radius: 20px; }
-.board svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.board > svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
 .stop { position: absolute; transform: translate(-50%, -50%); }
 .thumb {
   display: block; padding: 0; width: 50px; height: 50px; border-radius: 50%; overflow: hidden;
@@ -119,7 +119,9 @@ h2 .sub { display: block; color: var(--muted); font-size: clamp(18px, 3vh, 24px)
   background: var(--bg); color: var(--pink); font: 600 18px 'JetBrains Mono', monospace; cursor: pointer;
 }
 .locked { display: block; width: 14px; height: 14px; border-radius: 50%; background: var(--line2); }
-.token { position: absolute; transform: translate(-50%, -100%); margin-top: -30px; transition: left .6s ease, top .6s ease; pointer-events: none; }
+.token { position: absolute; z-index: 2; transform: translate(-50%, -100%); margin-top: -30px; pointer-events: none; filter: drop-shadow(0 4px 6px rgba(0, 0, 0, .4)); }
+.spark { position: absolute; z-index: 1; width: 8px; height: 8px; border-radius: 50%; transform: translate(-50%, -50%); pointer-events: none; animation: burst .8s ease-out forwards; }
+.march { animation: march 1s linear infinite; }
 .legend { display: flex; flex-wrap: wrap; gap: 16px; font-size: 13px; color: var(--muted); }
 .legend span { display: flex; align-items: center; gap: 6px; }
 .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; }
@@ -168,6 +170,8 @@ h2 .sub { display: block; color: var(--muted); font-size: clamp(18px, 3vh, 24px)
 @keyframes float { 0% { transform: translateY(0) rotate(0); opacity: 0; } 10% { opacity: 1; } 100% { transform: translateY(-110vh) rotate(25deg); opacity: 0; } }
 @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.12); } }
 @keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+@keyframes burst { to { transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(.2); opacity: 0; } }
+@keyframes march { to { stroke-dashoffset: -14; } }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }

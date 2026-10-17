@@ -128,7 +128,7 @@ const SCREENS = [
         <div class="board">
           <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
             <polyline points="${points(POS.length)}" fill="none" stroke="#2E2340" stroke-width="30" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>
-            <polyline points="${points(POS.length)}" fill="none" stroke="#5A4870" stroke-width="2" stroke-dasharray="6 8" vector-effect="non-scaling-stroke"/>
+            <polyline class="march" points="${points(POS.length)}" fill="none" stroke="#5A4870" stroke-width="2" stroke-dasharray="6 8" vector-effect="non-scaling-stroke"/>
             <polyline id="trail" points="" fill="none" stroke="#FF8AC2" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>
           </svg>
           ${POS.map((p, i) => `<div class="stop" id="stop-${i}" style="left: ${p[0]}%; top: ${p[1]}%"></div>`).join('')}
@@ -228,10 +228,8 @@ function updateCamino(first) {
   });
 
   const token = $('token');
-  if (first) token.style.transition = 'none';
   token.style.left = POS[state.photo][0] + '%';
   token.style.top = POS[state.photo][1] + '%';
-  if (first) requestAnimationFrame(() => { token.style.transition = ''; });
 
   const p = PHOTOS[state.view];
   const tilt = state.view % 2 === 0 ? -2 : 2;
@@ -252,6 +250,61 @@ function updateCamino(first) {
   $('path-btn').innerHTML = state.photo < last
     ? `<button class="btn btn-light btn-big" data-act="advance">Avanzar</button>`
     : `<button class="btn btn-primary btn-big pop" data-act="next">Hacer deploy</button>`;
+}
+
+// El corazón salta hasta la próxima parada y el trazo lo sigue.
+let walking = false;
+
+function walk(from, to, done) {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const dur = reduce ? 0 : 700;
+  const token = $('token');
+  const heart = token.querySelector('svg');
+  const trail = $('trail');
+  const [x0, y0] = POS[from];
+  const [x1, y1] = POS[to];
+  const base = points(from + 1);
+  const start = performance.now();
+  heart.classList.remove('bob');
+
+  function frame(now) {
+    const t = dur ? Math.min((now - start) / dur, 1) : 1;
+    const e = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+    const x = x0 + (x1 - x0) * e;
+    const y = y0 + (y1 - y0) * e;
+    token.style.left = x + '%';
+    token.style.top = y + '%';
+    heart.style.transform = `translateY(${-Math.sin(Math.PI * t) * 18}px) rotate(${Math.sin(Math.PI * 2 * t) * 12}deg)`;
+    trail.setAttribute('points', base + ' ' + x + ',' + y);
+    if (t < 1) {
+      requestAnimationFrame(frame);
+    } else {
+      heart.style.transform = '';
+      heart.classList.add('bob');
+      done();
+    }
+  }
+  requestAnimationFrame(frame);
+}
+
+// Destellos al llegar a una parada.
+function burst(i) {
+  const board = document.querySelector('.board');
+  const [x, y] = POS[i];
+  const color = STAGE[PHOTOS[i].stage];
+  for (let k = 0; k < 10; k++) {
+    const angle = (k / 10) * Math.PI * 2;
+    const dist = 34 + (k % 2) * 12;
+    const spark = document.createElement('span');
+    spark.className = 'spark';
+    spark.style.left = x + '%';
+    spark.style.top = y + '%';
+    spark.style.background = k % 2 ? color : '#FFF3B8';
+    spark.style.setProperty('--dx', Math.cos(angle) * dist + 'px');
+    spark.style.setProperty('--dy', Math.sin(angle) * dist + 'px');
+    board.appendChild(spark);
+    setTimeout(() => spark.remove(), 900);
+  }
 }
 
 /* ---------- Acciones ---------- */
@@ -303,13 +356,21 @@ const ACTIONS = {
   },
 
   advance: () => {
-    const n = Math.min(state.photo + 1, PHOTOS.length - 1);
-    state.photo = n;
-    state.view = n;
-    updateCamino(false);
+    if (walking || state.photo >= PHOTOS.length - 1) return;
+    walking = true;
+    const from = state.photo;
+    const to = from + 1;
+    walk(from, to, () => {
+      state.photo = to;
+      state.view = to;
+      updateCamino(false);
+      burst(to);
+      walking = false;
+    });
   },
 
   view: (el) => {
+    if (walking) return;
     state.view = Number(el.dataset.i);
     updateCamino(false);
   }
