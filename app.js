@@ -122,7 +122,8 @@ const SCREENS = [
   <section>
     <div class="tag mono">Nivel 5 · El camino</div>
     <h2>El camino de Ma.</h2>
-    <div class="path-row">
+    <div class="path-grid">
+      <div class="photo-slot" id="slot"></div>
       <div class="board-col">
         <div class="board">
           <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
@@ -139,19 +140,21 @@ const SCREENS = [
           ${Object.entries(STAGE).map(([name, color]) => `<span><i style="background: ${color}"></i>${name}</span>`).join('')}
         </div>
       </div>
-      <div class="photo-slot" id="slot"></div>
-    </div>
-    <div class="controls">
-      <div class="count mono" id="count"></div>
-      <div id="path-btn"></div>
+      <div class="controls">
+        <div class="count mono" id="count"></div>
+        <div id="path-btn"></div>
+      </div>
     </div>
   </section>`,
 
   () => `
   <section class="final">
-    <div class="deploy mono">✓ deploy exitoso · en producción para siempre</div>
-    <svg class="pulse" width="96" height="96" viewBox="0 0 24 24" fill="#FF8AC2" aria-hidden="true">${HEART}</svg>
-    <h1 class="big">Feliz día, Ma.</h1>
+    <div class="final-head">
+      <div class="deploy mono">✓ deploy exitoso · en producción para siempre</div>
+      <svg class="pulse" width="64" height="64" viewBox="0 0 24 24" fill="#FF8AC2" aria-hidden="true">${HEART}</svg>
+      <h1 class="big">Feliz día, Ma.</h1>
+      <button class="btn btn-outline" data-act="restart">Volver a jugar</button>
+    </div>
     <article class="letter">
       <div class="letter-head mono">README.md</div>
       <div class="letter-body">
@@ -163,7 +166,6 @@ const SCREENS = [
         <p class="sign hand">Luz</p>
       </div>
     </article>
-    <button class="btn btn-outline" data-act="restart">Volver a jugar</button>
   </section>`
 ];
 
