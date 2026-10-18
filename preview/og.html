@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Preview</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400&family=Caveat:wght@600&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; width: 1200px; height: 630px; overflow: hidden; background: #1C1426; }
+  .card {
+    width: 1200px; height: 630px; position: relative; display: flex; align-items: center; gap: 72px;
+    padding: 0 96px; color: #F7EEF6; font-family: 'Space Grotesk', sans-serif;
+    background:
+      radial-gradient(circle at 78% 28%, rgba(255, 138, 194, .18), transparent 46%),
+      radial-gradient(circle at 18% 85%, rgba(199, 166, 255, .14), transparent 40%),
+      #1C1426;
+  }
+  .polaroid {
+    flex: none; background: #FFFDF8; padding: 16px 16px 18px; border-radius: 6px;
+    transform: rotate(-4deg); box-shadow: 0 30px 60px rgba(0, 0, 0, .55);
+  }
+  .polaroid img { display: block; width: 380px; height: 300px; object-fit: cover; object-position: 50% 35%; border-radius: 2px; }
+  .polaroid p { margin: 12px 0 0; font-family: 'Caveat', cursive; font-size: 34px; color: #2A2038; text-align: center; }
+  .text { display: flex; flex-direction: column; gap: 22px; }
+  .mono { font-family: 'JetBrains Mono', monospace; font-size: 22px; color: #8BE8C8; display: flex; align-items: center; gap: 12px; }
+  .dot { width: 12px; height: 12px; border-radius: 50%; background: #8BE8C8; }
+  h1 { margin: 0; font-size: 104px; line-height: .98; letter-spacing: -.03em; font-weight: 700; }
+  h1 span { color: #FF8AC2; }
+  .sub { margin: 0; font-size: 30px; line-height: 1.35; color: #D9C9DE; max-width: 520px; font-weight: 500; }
+  .heart { position: absolute; }
+</style>
+</head>
+<body>
+<div class="card">
+  <figure class="polaroid" style="margin: 0">
+    <img src="../fotos/mate.jpg" alt="">
+    <p>mate y risas</p>
+  </figure>
+  <div class="text">
+    <div class="mono"><span class="dot"></span>feliz_dia_ma.exe</div>
+    <h1>Feliz día,<br><span>Ma.</span></h1>
+    <p class="sub">Armé algo para vos,<br>con todo mi amor.</p>
+  </div>
+  <svg class="heart" style="right: 90px; top: 70px" width="56" height="56" viewBox="0 0 24 24" fill="#FF8AC2" aria-hidden="true"><path d="M12 21C12 21 3 14.5 3 8.5 3 5.4 5.4 3 8.3 3c1.6 0 3 .8 3.7 2 .7-1.2 2.1-2 3.7-2C18.6 3 21 5.4 21 8.5 21 14.5 12 21 12 21z"/></svg>
+  <svg class="heart" style="right: 170px; bottom: 80px; opacity: .7" width="30" height="30" viewBox="0 0 24 24" fill="#C7A6FF" aria-hidden="true"><path d="M12 21C12 21 3 14.5 3 8.5 3 5.4 5.4 3 8.3 3c1.6 0 3 .8 3.7 2 .7-1.2 2.1-2 3.7-2C18.6 3 21 5.4 21 8.5 21 14.5 12 21 12 21z"/></svg>
+  <svg class="heart" style="right: 64px; bottom: 150px; opacity: .8" width="22" height="22" viewBox="0 0 24 24" fill="#8BE8C8" aria-hidden="true"><path d="M12 21C12 21 3 14.5 3 8.5 3 5.4 5.4 3 8.3 3c1.6 0 3 .8 3.7 2 .7-1.2 2.1-2 3.7-2C18.6 3 21 5.4 21 8.5 21 14.5 12 21 12 21z"/></svg>
+</div>
+</body>
+</html>
